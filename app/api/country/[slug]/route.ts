@@ -75,7 +75,11 @@ export async function GET(
 }
 tournaments는 최신 대회부터 내림차순. top_players는 월드컵 통산 득점 기준 상위 3명.`
 
-  let worldcup = null
+  let worldcup: {
+    summary: unknown
+    tournaments: unknown[]
+    top_players: Array<{ name_ko: string; name_en: string; wc_goals: number; position: string; notable: string; image_url?: string | null }>
+  } | null = null
   try {
     const res = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`,
@@ -95,6 +99,26 @@ tournaments는 최신 대회부터 내림차순. top_players는 월드컵 통산
     }
   } catch (e) {
     console.error('Gemini error:', e)
+  }
+
+  // Wikipedia 선수 이미지 조회 (Gemini 결과가 있을 때만)
+  if (worldcup?.top_players?.length) {
+    worldcup.top_players = await Promise.all(
+      worldcup.top_players.map(async (player) => {
+        try {
+          const title = encodeURIComponent(player.name_en.replace(/ /g, '_'))
+          const res = await fetch(
+            `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`,
+            { headers: { 'User-Agent': 'worldcup-523/1.0' } }
+          )
+          if (res.ok) {
+            const data = await res.json()
+            return { ...player, image_url: data.thumbnail?.source ?? null }
+          }
+        } catch {}
+        return { ...player, image_url: null }
+      })
+    )
   }
 
   return NextResponse.json({

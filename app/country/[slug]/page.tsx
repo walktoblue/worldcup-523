@@ -42,6 +42,7 @@ type Player = {
   wc_goals: number
   position: string
   notable: string
+  image_url?: string | null
 }
 
 type Worldcup = {
@@ -280,16 +281,25 @@ export default function CountryPage({
                   className="flex flex-col items-center text-center p-6 rounded-xl border border-white/10 transition-transform hover:scale-[1.02]"
                   style={{ backgroundColor: '#151B2E' }}
                 >
-                  {/* 순위 원형 아바타 */}
+                  {/* 선수 사진 / 순위 원형 */}
                   <div
-                    className="w-28 h-28 rounded-full flex items-center justify-center text-4xl font-extrabold border-4 mb-4 shrink-0"
-                    style={{
-                      borderColor: RANK_COLORS[i] ?? '#434653',
-                      color: RANK_COLORS[i] ?? '#434653',
-                      backgroundColor: '#0A0E1A',
-                    }}
+                    className="w-28 h-28 rounded-full overflow-hidden border-4 mb-4 shrink-0"
+                    style={{ borderColor: RANK_COLORS[i] ?? '#434653' }}
                   >
-                    {i + 1}
+                    {p.image_url ? (
+                      <img
+                        src={p.image_url}
+                        alt={p.name_ko}
+                        className="w-full h-full object-cover object-top"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full flex items-center justify-center text-4xl font-extrabold"
+                        style={{ backgroundColor: '#0A0E1A', color: RANK_COLORS[i] ?? '#434653' }}
+                      >
+                        {i + 1}
+                      </div>
+                    )}
                   </div>
                   <h4 className="text-xl font-bold text-foreground">{p.name_ko}</h4>
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mt-1">{p.position}</p>

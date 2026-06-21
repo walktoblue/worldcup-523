@@ -19,7 +19,7 @@ export async function GET(
     return NextResponse.json({ videos: [] })
   }
 
-  const query = `${country.name_en} world cup best goals all time`
+  const query = `${country.name_en} FIFA World Cup goals`
 
   try {
     const res = await fetch(
