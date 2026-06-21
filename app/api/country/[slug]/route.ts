@@ -19,30 +19,16 @@ export async function GET(
     return NextResponse.json({ error: '국가를 찾을 수 없습니다' }, { status: 404 })
   }
 
-  // REST Countries API
-  let countryInfo = null
-  try {
-    const res = await fetch(
-      `https://restcountries.com/v3.1/name/${encodeURIComponent(country.name_en)}?fullText=true`,
-      { next: { revalidate: 86400 } }
-    )
-    if (res.ok) {
-      const data = await res.json()
-      const c = data[0]
-      countryInfo = {
-        flag: c.flags?.svg || c.flags?.png || null,
-        continent: c.region || null,
-        subregion: c.subregion || null,
-        capital: c.capital?.[0] || null,
-        population: c.population || null,
-      }
-    }
-  } catch {}
-
-  // Gemini — 월드컵 기록 생성
-  const prompt = `${country.name_ko}(${country.name_en}) 국가의 FIFA 월드컵 역대 성적 데이터를 정확하게 알려주세요.
+  // Gemini — 기본정보 + 월드컵 기록 한 번에 생성
+  const prompt = `${country.name_ko}(${country.name_en}) 국가에 대해 정확한 데이터를 알려주세요.
 반드시 아래 JSON 스키마만 반환하세요. 다른 텍스트 없이 JSON만:
 {
+  "country_info": {
+    "continent": "대륙이름한국어(예:유럽/남미/북중미/아시아/아프리카/오세아니아)",
+    "capital": "수도이름한국어",
+    "population": 인구수숫자(정수),
+    "flag_emoji": "국기이모지"
+  },
   "summary": {
     "total_participations": 숫자,
     "wins": 숫자,
@@ -75,11 +61,13 @@ export async function GET(
 }
 tournaments는 최신 대회부터 내림차순. top_players는 월드컵 통산 득점 기준 상위 3명.`
 
-  let worldcup: {
+  let geminiResult: {
+    country_info?: { continent: string; capital: string; population: number; flag_emoji: string }
     summary: unknown
     tournaments: unknown[]
     top_players: Array<{ name_ko: string; name_en: string; wc_goals: number; position: string; notable: string; image_url?: string | null }>
   } | null = null
+
   try {
     const res = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`,
@@ -95,16 +83,16 @@ tournaments는 최신 대회부터 내림차순. top_players는 월드컵 통산
     if (res.ok) {
       const json = await res.json()
       const text = json.candidates?.[0]?.content?.parts?.[0]?.text
-      if (text) worldcup = JSON.parse(text)
+      if (text) geminiResult = JSON.parse(text)
     }
   } catch (e) {
     console.error('Gemini error:', e)
   }
 
-  // Wikipedia 선수 이미지 조회 (Gemini 결과가 있을 때만)
-  if (worldcup?.top_players?.length) {
-    worldcup.top_players = await Promise.all(
-      worldcup.top_players.map(async (player) => {
+  // Wikipedia 선수 이미지 조회
+  if (geminiResult?.top_players?.length) {
+    geminiResult.top_players = await Promise.all(
+      geminiResult.top_players.map(async (player) => {
         try {
           const title = encodeURIComponent(player.name_en.replace(/ /g, '_'))
           const res = await fetch(
@@ -121,8 +109,20 @@ tournaments는 최신 대회부터 내림차순. top_players는 월드컵 통산
     )
   }
 
+  const ci = geminiResult?.country_info
+
   return NextResponse.json({
-    country: { slug: country.slug, name_ko: country.name_ko, name_en: country.name_en, ...countryInfo },
-    worldcup,
+    country: {
+      slug: country.slug,
+      name_ko: country.name_ko,
+      name_en: country.name_en,
+      continent: ci?.continent ?? null,
+      capital: ci?.capital ?? null,
+      population: ci?.population ?? null,
+      flag_emoji: ci?.flag_emoji ?? null,
+    },
+    worldcup: geminiResult
+      ? { summary: geminiResult.summary, tournaments: geminiResult.tournaments, top_players: geminiResult.top_players }
+      : null,
   })
 }

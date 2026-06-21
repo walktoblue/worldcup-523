@@ -9,9 +9,8 @@ type CountryInfo = {
   slug: string
   name_ko: string
   name_en: string
-  flag: string | null
+  flag_emoji: string | null
   continent: string | null
-  subregion: string | null
   capital: string | null
   population: number | null
 }
@@ -145,10 +144,10 @@ export default function CountryPage({
           <div className="w-full md:w-2/5 aspect-[3/2] rounded-xl overflow-hidden border border-border shadow-2xl shrink-0 bg-card flex items-center justify-center">
             {loading ? (
               <Skeleton className="w-full h-full" />
-            ) : country?.flag ? (
-              <img src={country.flag} alt={`${country.name_ko} 국기`} className="w-full h-full object-cover" />
             ) : (
-              <span className="text-6xl">🏳️</span>
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-card to-background">
+                <span className="text-8xl">{country?.flag_emoji ?? '🏳️'}</span>
+              </div>
             )}
           </div>
 
