@@ -9,6 +9,7 @@ type CountryInfo = {
   slug: string
   name_ko: string
   name_en: string
+  flag_url: string | null
   flag_emoji: string | null
   continent: string | null
   capital: string | null
@@ -42,6 +43,8 @@ type Player = {
   position: string
   notable: string
   image_url?: string | null
+  video_id?: string | null
+  video_title?: string | null
 }
 
 type Worldcup = {
@@ -49,8 +52,6 @@ type Worldcup = {
   tournaments: Tournament[]
   top_players: Player[]
 }
-
-type Video = { id: string; title: string; thumbnail: string | null }
 
 /* ── 유틸 ── */
 function fmt(n: number | null) {
@@ -60,9 +61,8 @@ function fmt(n: number | null) {
   return n.toLocaleString()
 }
 
-const RANK_COLORS = ['#E9C349', '#C0C0C0', '#CD7F32'] // 금·은·동
+const RANK_COLORS = ['#E9C349', '#C0C0C0', '#CD7F32']
 
-/* ── SectionTitle ── */
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-2 mb-6">
@@ -72,7 +72,6 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   )
 }
 
-/* ── 스켈레톤 ── */
 function Skeleton({ className }: { className?: string }) {
   return <div className={`animate-pulse rounded bg-muted ${className ?? ''}`} />
 }
@@ -88,9 +87,7 @@ export default function CountryPage({
 
   const [country, setCountry] = useState<CountryInfo | null>(null)
   const [worldcup, setWorldcup] = useState<Worldcup | null>(null)
-  const [videos, setVideos] = useState<Video[]>([])
   const [loading, setLoading] = useState(true)
-  const [ytLoading, setYtLoading] = useState(true)
   const [error, setError] = useState('')
   const [playingId, setPlayingId] = useState<string | null>(null)
 
@@ -104,12 +101,6 @@ export default function CountryPage({
       })
       .catch(() => setError('데이터를 불러오지 못했습니다'))
       .finally(() => setLoading(false))
-
-    fetch(`/api/youtube/${slug}`)
-      .then(r => r.json())
-      .then(data => setVideos(data.videos ?? []))
-      .catch(() => {})
-      .finally(() => setYtLoading(false))
   }, [slug])
 
   const goBack = () => router.push('/')
@@ -131,23 +122,27 @@ export default function CountryPage({
           <button
             onClick={goBack}
             className="w-9 h-9 flex items-center justify-center rounded-full text-muted-foreground hover:bg-muted transition-colors"
-            title="뒤로"
           >←</button>
           <h1 className="text-lg font-bold text-secondary">523 월드컵 역대 성적 찾기</h1>
         </div>
       </header>
 
       <main className="max-w-5xl mx-auto w-full px-4 md:px-6 py-8 pb-24 md:pb-12 space-y-12">
+
         {/* ── Section 1: 국가 소개 ── */}
         <section className="flex flex-col md:flex-row items-center gap-8">
           {/* 국기 */}
           <div className="w-full md:w-2/5 aspect-[3/2] rounded-xl overflow-hidden border border-border shadow-2xl shrink-0 bg-card flex items-center justify-center">
             {loading ? (
               <Skeleton className="w-full h-full" />
+            ) : country?.flag_url ? (
+              <img
+                src={country.flag_url}
+                alt={`${country.name_ko} 국기`}
+                className="w-full h-full object-cover"
+              />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-card to-background">
-                <span className="text-8xl">{country?.flag_emoji ?? '🏳️'}</span>
-              </div>
+              <span className="text-8xl">{country?.flag_emoji ?? '🏳️'}</span>
             )}
           </div>
 
@@ -270,27 +265,23 @@ export default function CountryPage({
           </SectionTitle>
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-64" />)}
+              {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-96" />)}
             </div>
           ) : worldcup?.top_players?.length ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {worldcup.top_players.map((p, i) => (
                 <div
                   key={p.name_en}
-                  className="flex flex-col items-center text-center p-6 rounded-xl border border-white/10 transition-transform hover:scale-[1.02]"
+                  className="flex flex-col items-center text-center p-6 rounded-xl border border-white/10"
                   style={{ backgroundColor: '#151B2E' }}
                 >
-                  {/* 선수 사진 / 순위 원형 */}
+                  {/* 선수 사진 */}
                   <div
                     className="w-28 h-28 rounded-full overflow-hidden border-4 mb-4 shrink-0"
                     style={{ borderColor: RANK_COLORS[i] ?? '#434653' }}
                   >
                     {p.image_url ? (
-                      <img
-                        src={p.image_url}
-                        alt={p.name_ko}
-                        className="w-full h-full object-cover object-top"
-                      />
+                      <img src={p.image_url} alt={p.name_ko} className="w-full h-full object-cover object-top" />
                     ) : (
                       <div
                         className="w-full h-full flex items-center justify-center text-4xl font-extrabold"
@@ -300,10 +291,47 @@ export default function CountryPage({
                       </div>
                     )}
                   </div>
+
                   <h4 className="text-xl font-bold text-foreground">{p.name_ko}</h4>
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mt-1">{p.position}</p>
                   <p className="text-4xl font-extrabold mt-2" style={{ color: '#E9C349' }}>{p.wc_goals}골</p>
                   <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{p.notable}</p>
+
+                  {/* 대표골 영상 */}
+                  {p.video_id && (
+                    <div className="w-full mt-5">
+                      <p className="text-xs text-muted-foreground mb-2 uppercase tracking-widest">월드컵 대표골</p>
+                      {playingId === p.video_id ? (
+                        <div className="relative w-full aspect-video rounded-lg overflow-hidden">
+                          <iframe
+                            src={`https://www.youtube.com/embed/${p.video_id}?autoplay=1`}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="absolute inset-0 w-full h-full"
+                          />
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setPlayingId(p.video_id!)}
+                          className="relative w-full aspect-video rounded-lg overflow-hidden border border-white/10 group block"
+                        >
+                          <img
+                            src={`https://img.youtube.com/vi/${p.video_id}/mqdefault.jpg`}
+                            alt={p.video_title ?? ''}
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/55 transition-colors">
+                            <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center group-hover:scale-110 transition-transform">
+                              <span className="text-white text-xl ml-0.5">▶</span>
+                            </div>
+                          </div>
+                        </button>
+                      )}
+                      {p.video_title && (
+                        <p className="text-xs text-muted-foreground mt-2 line-clamp-2 text-left">{p.video_title}</p>
+                      )}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -312,30 +340,6 @@ export default function CountryPage({
           )}
         </section>
 
-        {/* ── Section 5: 유튜브 TOP 5 골 ── */}
-        <section>
-          <SectionTitle>역대 TOP 5 골</SectionTitle>
-          {ytLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="aspect-video w-full" />)}
-            </div>
-          ) : videos.length === 0 ? (
-            <p className="text-muted-foreground">영상을 불러올 수 없습니다</p>
-          ) : (
-            <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {videos.slice(0, 4).map((v, i) => (
-                  <VideoCard key={v.id} video={v} rank={i + 1} playing={playingId === v.id} onPlay={() => setPlayingId(v.id)} />
-                ))}
-              </div>
-              {videos[4] && (
-                <div className="max-w-2xl mx-auto mt-6">
-                  <VideoCard video={videos[4]} rank={5} playing={playingId === videos[4].id} onPlay={() => setPlayingId(videos[4].id)} />
-                </div>
-              )}
-            </>
-          )}
-        </section>
       </main>
 
       {/* 모바일 하단 네비 */}
@@ -353,54 +357,6 @@ export default function CountryPage({
           <span className="text-lg">👤</span>프로필
         </button>
       </nav>
-    </div>
-  )
-}
-
-/* ── 유튜브 비디오 카드 ── */
-function VideoCard({
-  video,
-  rank,
-  playing,
-  onPlay,
-}: {
-  video: Video
-  rank: number
-  playing: boolean
-  onPlay: () => void
-}) {
-  return (
-    <div className="space-y-2">
-      <div className="relative aspect-video rounded-xl overflow-hidden border border-white/10 shadow-lg group bg-card">
-        {playing ? (
-          <iframe
-            src={`https://www.youtube.com/embed/${video.id}?autoplay=1`}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="absolute inset-0 w-full h-full"
-          />
-        ) : (
-          <>
-            {video.thumbnail ? (
-              <img src={video.thumbnail} alt={video.title} className="absolute inset-0 w-full h-full object-cover" />
-            ) : (
-              <div className="absolute inset-0 bg-gradient-to-br from-card to-background" />
-            )}
-            {/* 오버레이 재생 버튼 */}
-            <button
-              onClick={onPlay}
-              className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/50 transition-colors group"
-            >
-              <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40 group-hover:scale-110 transition-transform">
-                <span className="text-white text-3xl ml-1">▶</span>
-              </div>
-            </button>
-          </>
-        )}
-      </div>
-      <p className="text-sm font-semibold text-foreground line-clamp-2">
-        {rank}. {video.title}
-      </p>
     </div>
   )
 }

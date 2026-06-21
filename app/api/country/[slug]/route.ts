@@ -2,6 +2,55 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY!
+const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY!
+
+async function fetchFlagUrl(countryNameEn: string): Promise<string | null> {
+  try {
+    const title = encodeURIComponent(`Flag_of_${countryNameEn.replace(/ /g, '_')}`)
+    const res = await fetch(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`,
+      { headers: { 'User-Agent': 'worldcup-523/1.0' } }
+    )
+    if (res.ok) {
+      const data = await res.json()
+      return data.originalimage?.source ?? data.thumbnail?.source ?? null
+    }
+  } catch {}
+  return null
+}
+
+async function fetchWikiImage(nameEn: string): Promise<string | null> {
+  try {
+    const title = encodeURIComponent(nameEn.replace(/ /g, '_'))
+    const res = await fetch(
+      `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`,
+      { headers: { 'User-Agent': 'worldcup-523/1.0' } }
+    )
+    if (res.ok) {
+      const data = await res.json()
+      return data.thumbnail?.source ?? null
+    }
+  } catch {}
+  return null
+}
+
+async function searchYouTubeGoal(
+  playerNameEn: string,
+  countryNameEn: string
+): Promise<{ id: string; title: string } | null> {
+  try {
+    const q = `${playerNameEn} ${countryNameEn} World Cup goal`
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(q)}&type=video&maxResults=1&key=${YOUTUBE_API_KEY}`
+    )
+    if (!res.ok) return null
+    const data = await res.json()
+    const item = data.items?.[0]
+    if (!item) return null
+    return { id: item.id.videoId, title: item.snippet.title }
+  } catch {}
+  return null
+}
 
 export async function GET(
   _req: NextRequest,
@@ -19,7 +68,7 @@ export async function GET(
     return NextResponse.json({ error: '국가를 찾을 수 없습니다' }, { status: 404 })
   }
 
-  // Gemini — 기본정보 + 월드컵 기록 한 번에 생성
+  // Gemini — 기본정보 + 월드컵 기록
   const prompt = `${country.name_ko}(${country.name_en}) 국가에 대해 정확한 데이터를 알려주세요.
 반드시 아래 JSON 스키마만 반환하세요. 다른 텍스트 없이 JSON만:
 {
@@ -61,13 +110,15 @@ export async function GET(
 }
 tournaments는 최신 대회부터 내림차순. top_players는 월드컵 통산 득점 기준 상위 3명.`
 
-  let geminiResult: {
+  type RawPlayer = { name_ko: string; name_en: string; wc_goals: number; position: string; notable: string }
+  type GeminiResult = {
     country_info?: { continent: string; capital: string; population: number; flag_emoji: string }
     summary: unknown
     tournaments: unknown[]
-    top_players: Array<{ name_ko: string; name_en: string; wc_goals: number; position: string; notable: string; image_url?: string | null }>
-  } | null = null
+    top_players: RawPlayer[]
+  }
 
+  let geminiResult: GeminiResult | null = null
   try {
     const res = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`,
@@ -89,25 +140,21 @@ tournaments는 최신 대회부터 내림차순. top_players는 월드컵 통산
     console.error('Gemini error:', e)
   }
 
-  // Wikipedia 선수 이미지 조회
-  if (geminiResult?.top_players?.length) {
-    geminiResult.top_players = await Promise.all(
-      geminiResult.top_players.map(async (player) => {
-        try {
-          const title = encodeURIComponent(player.name_en.replace(/ /g, '_'))
-          const res = await fetch(
-            `https://en.wikipedia.org/api/rest_v1/page/summary/${title}`,
-            { headers: { 'User-Agent': 'worldcup-523/1.0' } }
-          )
-          if (res.ok) {
-            const data = await res.json()
-            return { ...player, image_url: data.thumbnail?.source ?? null }
-          }
-        } catch {}
-        return { ...player, image_url: null }
-      })
-    )
-  }
+  // 국기 이미지 + 선수별 (Wikipedia 사진 + YouTube 대표골) 병렬 조회
+  const [flagUrl, enrichedPlayers] = await Promise.all([
+    fetchFlagUrl(country.name_en),
+    geminiResult?.top_players?.length
+      ? Promise.all(
+          geminiResult.top_players.map(async (p) => {
+            const [image_url, video] = await Promise.all([
+              fetchWikiImage(p.name_en),
+              searchYouTubeGoal(p.name_en, country.name_en),
+            ])
+            return { ...p, image_url, video_id: video?.id ?? null, video_title: video?.title ?? null }
+          })
+        )
+      : Promise.resolve([]),
+  ])
 
   const ci = geminiResult?.country_info
 
@@ -116,13 +163,14 @@ tournaments는 최신 대회부터 내림차순. top_players는 월드컵 통산
       slug: country.slug,
       name_ko: country.name_ko,
       name_en: country.name_en,
+      flag_url: flagUrl,
+      flag_emoji: ci?.flag_emoji ?? null,
       continent: ci?.continent ?? null,
       capital: ci?.capital ?? null,
       population: ci?.population ?? null,
-      flag_emoji: ci?.flag_emoji ?? null,
     },
     worldcup: geminiResult
-      ? { summary: geminiResult.summary, tournaments: geminiResult.tournaments, top_players: geminiResult.top_players }
+      ? { summary: geminiResult.summary, tournaments: geminiResult.tournaments, top_players: enrichedPlayers }
       : null,
   })
 }
