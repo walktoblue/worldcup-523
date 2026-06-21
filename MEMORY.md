@@ -17,3 +17,22 @@
 - 단일 페이지(검색 + 결과 같은 화면): 스크롤 UX가 복잡해지고 URL 공유가 불가능해서 2화면으로 분리했다.
 - 선수 이름 직접 큐레이션: 주관적이고 데이터 관리가 어려워 다득점 순위로 통일했다.
 - 국가 전체 데이터 처음부터 시드: 80개국 수동 입력은 기획 단계에서 무리 — MVP는 20개국으로 시작한다.
+
+---
+
+## 연결 (2026-06-21)
+
+### 어떻게 연결했나
+- **GitHub**: `gh repo create worldcup-523 --source=. --public --push` — 한 번에 생성·푸시 완료.
+- **Vercel**: `vercel link --yes --project worldcup-523` — GitHub 레포를 자동으로 감지해 연결. Vercel이 자동배포 설정까지 해줬다.
+- **Supabase**: `vercel integration add supabase`가 "이미 연동 있음" 오류. 기존 연동은 도너월 프로젝트용이라 새 프로젝트를 CLI로 직접 생성했다: `supabase projects create worldcup-523-db --org-id ... --db-password ... --region us-east-1`.
+- **countries 테이블**: `supabase db query --linked`로 생성 + 60개국 시드 완료. slug/name_ko/name_en 3컬럼 구조.
+- **환경변수**: `vercel env add`로 NEXT_PUBLIC_SUPABASE_URL · NEXT_PUBLIC_SUPABASE_ANON_KEY를 production/preview/development 세 환경에 등록.
+
+### 막힌 점과 해결
+- **supabase login 비대화형 오류**: Claude의 Bash 도구는 TTY가 없어서 `supabase login`이 바로 실패한다. `supabase login --token <token>` 방식으로 우회 — 사용자가 Supabase 대시보드에서 액세스 토큰을 발급해 전달했다.
+- **Vercel Supabase 연동 한도**: 한 계정에 Supabase 통합이 이미 있으면 `vercel integration add`가 "Cannot install more than one" 오류. Supabase CLI로 프로젝트를 직접 생성해 우회했다.
+- **shadcn/ui 새 버전 인터랙티브 프롬프트**: `--yes` 플래그가 Next.js 16 + 새 shadcn 버전에서 작동 안 함. `--defaults` 플래그로 대체 (`--base radix --preset nova` 기본값 적용).
+
+### 라이브
+배포 전 (구현 단계 완료 후 확인 예정)

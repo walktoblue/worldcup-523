@@ -82,7 +82,7 @@ Next.js (App Router, TypeScript) · Tailwind CSS · shadcn/ui · Supabase · Ver
 ## 진행 상황
 - [x] 기획 완료
 - [x] Stitch 프로토타입
-- [ ] 연결 (GitHub · Vercel · Supabase)
+- [x] 연결 (GitHub · Vercel · Supabase)
 - [ ] 구현: 검색 화면
 - [ ] 구현: 국가 상세 화면
 - [ ] 배포 확인
