@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>월드컵 역대 성적 찾기</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#0f131f",
+                    "outline-variant": "#434653",
+                    "surface-variant": "#313442",
+                    "on-secondary-container": "#342800",
+                    "on-tertiary-container": "#adb3cc",
+                    "surface-container-lowest": "#0a0e1a",
+                    "on-surface-variant": "#c4c6d5",
+                    "on-secondary-fixed-variant": "#574500",
+                    "error-container": "#93000a",
+                    "on-error-container": "#ffdad6",
+                    "background": "#0f131f",
+                    "on-background": "#dfe2f3",
+                    "on-primary-container": "#98b1ff",
+                    "tertiary": "#c0c5df",
+                    "surface-bright": "#353946",
+                    "on-tertiary-fixed": "#151b2e",
+                    "inverse-surface": "#dfe2f3",
+                    "outline": "#8e909e",
+                    "secondary": "#e9c349",
+                    "secondary-fixed": "#ffe088",
+                    "tertiary-container": "#3f455a",
+                    "surface-container-high": "#262a37",
+                    "inverse-primary": "#2d58bf",
+                    "secondary-container": "#af8d11",
+                    "on-tertiary": "#2a3044",
+                    "primary": "#b4c5ff",
+                    "on-primary": "#002a77",
+                    "on-surface": "#dfe2f3",
+                    "on-error": "#690005",
+                    "surface-container-highest": "#313442",
+                    "error": "#ffb4ab",
+                    "primary-container": "#003da5",
+                    "surface-tint": "#b4c5ff",
+                    "on-primary-fixed": "#00174b",
+                    "on-secondary-fixed": "#241a00",
+                    "on-tertiary-fixed-variant": "#40465b",
+                    "tertiary-fixed-dim": "#c0c5df",
+                    "secondary-fixed-dim": "#e9c349",
+                    "on-secondary": "#3c2f00",
+                    "on-primary-fixed-variant": "#033ea6",
+                    "surface-container": "#1b1f2c",
+                    "surface": "#0f131f",
+                    "tertiary-fixed": "#dce1fc",
+                    "surface-container-low": "#171b28",
+                    "inverse-on-surface": "#2c303d",
+                    "primary-fixed": "#dbe1ff",
+                    "primary-fixed-dim": "#b4c5ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "md": "16px",
+                    "xs": "4px",
+                    "container-max": "1280px",
+                    "xl": "48px",
+                    "base": "4px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "stat-xl": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "stat-xl": ["40px", {"lineHeight": "40px", "fontWeight": "800"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0A0E1A; /* Surface color Level 0 */
+            color: #dfe2f3;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .gold-underline {
+            position: relative;
+        }
+        .gold-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: #D4AF37;
+            border-radius: 2px;
+        }
+        .glass-panel {
+            background: rgba(21, 27, 46, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .bento-glow {
+            box-shadow: 0 0 40px -10px rgba(0, 61, 165, 0.3);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface-container dark:bg-surface-container border-b border-outline-variant docked full-width top-0 sticky z-50 flex justify-between items-center w-full px-margin-mobile md:px-lg h-16">
+<div class="flex items-center gap-2">
+<h1 class="font-headline-md text-headline-md-mobile md:text-headline-md font-bold text-secondary dark:text-secondary">523 월드컵 역대 성적 찾기</h1>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-variant transition-colors p-2 rounded-full active:scale-95 transition-transform">history</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-variant transition-colors p-2 rounded-full active:scale-95 transition-transform">settings</button>
+</div>
+</header>
+<!-- Main Content: Home / Search -->
+<main class="flex-grow flex flex-col items-center justify-center px-margin-mobile md:px-lg py-xl relative">
+<!-- Subtle Ambient Background Decor -->
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-container/10 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary-container/10 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="w-full max-w-3xl z-10 text-center flex flex-col items-center gap-xl">
+<!-- App Title Section -->
+<div class="space-y-4">
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-white font-extrabold gold-underline">
+                    월드컵 역대 성적 찾기
+                </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-6 max-w-xl">
+                    역대 모든 월드컵 대회의 영광과 기록을 탐색하세요.<br/>
+                    궁금한 국가의 이름을 입력하여 역대 성적을 확인해보세요.
+                </p>
+</div>
+<!-- Search Input Section -->
+<div class="w-full mt-8">
+<div class="relative flex flex-col md:flex-row items-stretch gap-4 p-2 bg-surface-container-high rounded-xl border border-outline-variant shadow-2xl bento-glow transition-all focus-within:border-primary-container">
+<div class="flex-grow flex items-center px-4">
+<span class="material-symbols-outlined text-outline mr-3">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-on-surface placeholder-outline-variant font-body-lg text-body-lg w-full py-4" placeholder="국가 이름을 입력하세요 (예: 브라질, 한국)" type="text"/>
+</div>
+<button class="bg-primary-container text-white px-8 py-4 rounded-lg font-bold uppercase hover:brightness-110 active:scale-95 transition-all shadow-lg flex items-center justify-center gap-2">
+<span>검색</span>
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Popular Countries Chips -->
+<div class="flex flex-col items-center gap-md w-full">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">인기 검색 국가</span>
+<div class="flex flex-wrap justify-center gap-3">
+<button class="px-6 py-2 rounded-full border border-secondary text-secondary font-bold font-label-md text-label-md hover:bg-secondary/10 transition-colors active:scale-95 flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">star</span>브라질
+                    </button>
+<button class="px-6 py-2 rounded-full border border-secondary text-secondary font-bold font-label-md text-label-md hover:bg-secondary/10 transition-colors active:scale-95">독일</button>
+<button class="px-6 py-2 rounded-full border border-secondary text-secondary font-bold font-label-md text-label-md hover:bg-secondary/10 transition-colors active:scale-95">한국</button>
+<button class="px-6 py-2 rounded-full border border-secondary text-secondary font-bold font-label-md text-label-md hover:bg-secondary/10 transition-colors active:scale-95">아르헨티나</button>
+<button class="px-6 py-2 rounded-full border border-secondary text-secondary font-bold font-label-md text-label-md hover:bg-secondary/10 transition-colors active:scale-95">프랑스</button>
+</div>
+</div>
+</div>
+<!-- Visual Background Element (Cinematic Stadium Abstract) -->
+<div class="mt-xl w-full max-w-4xl opacity-40">
+<div class="rounded-2xl overflow-hidden glass-panel aspect-video md:aspect-[21/9]">
+<img class="w-full h-full object-cover" data-alt="A cinematic, low-angle shot of a dark, futuristic world cup stadium under dramatic blue and gold spotlighting. The grass is pristine and deep green, with a light atmospheric mist drifting across the field. The overall aesthetic is premium and high-contrast, echoing a cinematic sports broadcast suite, dominated by FIFA blue and deep navy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDLd40VRQNnRNMIbSSRWCKLvNk2MlfDQ8ToBtTl596RPadgPF3sj5yUXRlve8L_95EtAU7wmW-TFCLCVQBtnInTbRzl97OphZ_nr_vKCjeUoFiUTap_YplAvWQh14puKWVf7u9AYKP6K9jqTh1LN0M98D5Z3a2R7hJTczDdWRvaWIWwgVHOkFRTGf3RyPZm8gdsi13LtxSU7hrMAyJk1pDhBdOQx3sYTI9-Yw_qx6lHo0Fzk3vKfAxGiaki2QebSyY68Rs8cQ6fXrUK"/>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Visible on mobile) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-safe px-4 bg-surface-container-high dark:bg-surface-container-high shadow-lg rounded-t-xl z-50 md:hidden">
+<button class="flex flex-col items-center justify-center text-secondary font-bold active:scale-90 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-label-md text-label-md">홈</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-on-surface active:scale-90 transition-all">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label-md text-label-md">기록</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-on-surface active:scale-90 transition-all">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="font-label-md text-label-md">대회</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:text-on-surface active:scale-90 transition-all">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">프로필</span>
+</button>
+</nav>
+<script>
+        // Micro-interaction for search input glow
+        const searchInput = document.querySelector('input');
+        const searchContainer = searchInput?.closest('.shadow-2xl');
+        
+        if (searchInput && searchContainer) {
+            searchInput.addEventListener('focus', () => {
+                searchContainer.classList.add('ring-2', 'ring-primary-container/50');
+            });
+            searchInput.addEventListener('blur', () => {
+                searchContainer.classList.remove('ring-2', 'ring-primary-container/50');
+            });
+        }
+    </script>
+</body></html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>523 월드컵 역대 성적 찾기 - 국가 상세</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#0f131f",
+                    "outline-variant": "#434653",
+                    "surface-variant": "#313442",
+                    "on-secondary-container": "#342800",
+                    "on-tertiary-container": "#adb3cc",
+                    "surface-container-lowest": "#0a0e1a",
+                    "on-surface-variant": "#c4c6d5",
+                    "on-secondary-fixed-variant": "#574500",
+                    "error-container": "#93000a",
+                    "on-error-container": "#ffdad6",
+                    "background": "#0f131f",
+                    "on-background": "#dfe2f3",
+                    "on-primary-container": "#98b1ff",
+                    "tertiary": "#c0c5df",
+                    "surface-bright": "#353946",
+                    "on-tertiary-fixed": "#151b2e",
+                    "inverse-surface": "#dfe2f3",
+                    "outline": "#8e909e",
+                    "secondary": "#e9c349",
+                    "secondary-fixed": "#ffe088",
+                    "tertiary-container": "#3f455a",
+                    "surface-container-high": "#262a37",
+                    "inverse-primary": "#2d58bf",
+                    "secondary-container": "#af8d11",
+                    "on-tertiary": "#2a3044",
+                    "primary": "#b4c5ff",
+                    "on-primary": "#002a77",
+                    "on-surface": "#dfe2f3",
+                    "on-error": "#690005",
+                    "surface-container-highest": "#313442",
+                    "error": "#ffb4ab",
+                    "primary-container": "#003da5",
+                    "surface-tint": "#b4c5ff",
+                    "on-primary-fixed": "#00174b",
+                    "on-secondary-fixed": "#241a00",
+                    "on-tertiary-fixed-variant": "#40465b",
+                    "tertiary-fixed-dim": "#c0c5df",
+                    "secondary-fixed-dim": "#e9c349",
+                    "on-secondary": "#3c2f00",
+                    "on-primary-fixed-variant": "#033ea6",
+                    "surface-container": "#1b1f2c",
+                    "surface": "#0f131f",
+                    "tertiary-fixed": "#dce1fc",
+                    "surface-container-low": "#171b28",
+                    "inverse-on-surface": "#2c303d",
+                    "primary-fixed": "#dbe1ff",
+                    "primary-fixed-dim": "#b4c5ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "md": "16px",
+                    "xs": "4px",
+                    "container-max": "1280px",
+                    "xl": "48px",
+                    "base": "4px",
+                    "lg": "24px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "stat-xl": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "display-lg-mobile": ["Inter"],
+                    "display-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "stat-xl": ["40px", {"lineHeight": "40px", "fontWeight": "800"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #0f131f;
+            color: #dfe2f3;
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(21, 27, 46, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .table-stripe tr:nth-child(even) {
+            background-color: #1c2336;
+        }
+        .table-stripe tr:nth-child(odd) {
+            background-color: #151b2e;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-24">
+<!-- TopAppBar -->
+<header class="bg-surface-container dark:bg-surface-container docked full-width top-0 sticky z-50 border-b border-outline-variant flex justify-between items-center w-full px-margin-mobile md:px-lg h-16">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-variant transition-colors p-2 rounded-full active:scale-95 transition-transform">arrow_back</button>
+<h1 class="font-headline-md text-headline-md-mobile md:text-headline-md font-bold text-secondary dark:text-secondary">523 월드컵 역대 성적 찾기</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary hover:bg-surface-variant transition-colors p-2 rounded-full active:scale-95 transition-transform">history</span>
+<span class="material-symbols-outlined text-secondary hover:bg-surface-variant transition-colors p-2 rounded-full active:scale-95 transition-transform">settings</span>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-margin-mobile md:px-lg mt-8 space-y-xl">
+<!-- Section 1: 국가 소개 -->
+<section class="flex flex-col md:flex-row items-center gap-lg">
+<div class="w-full md:w-1/3 aspect-[3/2] rounded-xl overflow-hidden shadow-2xl border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A high-resolution, cinematic macro shot of the Brazil national flag fabric showing detailed textile patterns and vibrant colors. The lighting is dramatic and moody, emphasizing the prestige of the legendary football nation. The composition is dynamic, suggesting a sense of movement as if blowing in a stadium breeze. Dark mode aesthetic with deep shadows and high contrast." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBx76jSlxOnHdircEqL2SOCTmq_4qUtXgDCECHOFAFufxa6-SAnWE4aGfCUTXLkI9DyYUwgcxavUy1uKhcwBQtBy8C4m5mqM5Rqfvr2884M_etBXn7OhYYyV1mDGSYxWDkE1b15TQX_nMUFTTsmQ03tk6-CZYId5Ww6a04gdJswH94yMajl6XnjpB3km12z1TEXqIPYJ_khDGQt58JqXO5z_qKWvBPNZWuHUILavU48_uiLnWE1-lzd1cwalxa7ZN6cgqSRQ7oDTQm_"/>
+</div>
+<div class="w-full md:w-2/3 space-y-md">
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-white uppercase tracking-tighter">브라질 (BRAZIL)</h2>
+<div class="flex flex-wrap gap-sm">
+<div class="bg-surface-container-high px-lg py-md rounded-lg border border-outline-variant flex flex-col items-start min-w-[120px]">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">대륙</span>
+<span class="font-headline-md text-headline-md text-white">남미</span>
+</div>
+<div class="bg-surface-container-high px-lg py-md rounded-lg border border-outline-variant flex flex-col items-start min-w-[120px]">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">수도</span>
+<span class="font-headline-md text-headline-md text-white">브라질리아</span>
+</div>
+<div class="bg-surface-container-high px-lg py-md rounded-lg border border-outline-variant flex flex-col items-start min-w-[120px]">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">인구</span>
+<span class="font-headline-md text-headline-md text-white">2.14억</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Section 2: 월드컵 합산 기록 -->
+<section class="space-y-lg">
+<div class="flex items-center gap-sm">
+<span class="w-1 h-8 bg-secondary rounded-full"></span>
+<h3 class="font-headline-lg text-headline-lg text-white">월드컵 합산 기록</h3>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-md">
+<!-- Stat Cards -->
+<div class="bg-[#151B2E] p-lg rounded-xl border border-white/10 flex flex-col items-center justify-center text-center">
+<span class="font-stat-xl text-stat-xl text-secondary">22</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase mt-xs">참가 횟수</span>
+</div>
+<div class="bg-[#151B2E] p-lg rounded-xl border border-white/10 flex flex-col items-center justify-center text-center">
+<span class="font-stat-xl text-stat-xl text-secondary">76</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase mt-xs">총 승</span>
+</div>
+<div class="bg-[#151B2E] p-lg rounded-xl border border-white/10 flex flex-col items-center justify-center text-center">
+<span class="font-stat-xl text-stat-xl text-secondary">18</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase mt-xs">총 무</span>
+</div>
+<div class="bg-[#151B2E] p-lg rounded-xl border border-white/10 flex flex-col items-center justify-center text-center">
+<span class="font-stat-xl text-stat-xl text-secondary">15</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase mt-xs">총 패</span>
+</div>
+<div class="bg-[#151B2E] p-lg rounded-xl border border-white/10 flex flex-col items-center justify-center text-center">
+<span class="font-stat-xl text-stat-xl text-secondary">237</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase mt-xs">총 득점</span>
+</div>
+<div class="bg-[#151B2E] p-lg rounded-xl border border-white/10 flex flex-col items-center justify-center text-center">
+<span class="font-stat-xl text-stat-xl text-secondary">108</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase mt-xs">총 실점</span>
+</div>
+</div>
+</section>
+<!-- Section 3: 대회별 기록 -->
+<section class="space-y-lg">
+<div class="flex items-center gap-sm">
+<span class="w-1 h-8 bg-secondary rounded-full"></span>
+<h3 class="font-headline-lg text-headline-lg text-white">대회별 기록</h3>
+</div>
+<div class="overflow-x-auto rounded-xl border border-outline-variant">
+<table class="w-full text-left border-collapse table-stripe">
+<thead class="bg-surface-container-lowest border-b border-primary-container text-on-surface-variant font-label-md text-label-md uppercase">
+<tr>
+<th class="px-lg py-md">연도</th>
+<th class="px-lg py-md">라운드</th>
+<th class="px-lg py-md text-right">승</th>
+<th class="px-lg py-md text-right">무</th>
+<th class="px-lg py-md text-right">패</th>
+<th class="px-lg py-md text-right">득점</th>
+<th class="px-lg py-md text-right">실점</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-on-surface">
+<tr>
+<td class="px-lg py-md font-bold">2022 카타르</td>
+<td class="px-lg py-md">8강</td>
+<td class="px-lg py-md text-right">3</td>
+<td class="px-lg py-md text-right">1</td>
+<td class="px-lg py-md text-right">1</td>
+<td class="px-lg py-md text-right">8</td>
+<td class="px-lg py-md text-right">3</td>
+</tr>
+<tr>
+<td class="px-lg py-md font-bold">2018 러시아</td>
+<td class="px-lg py-md">8강</td>
+<td class="px-lg py-md text-right">3</td>
+<td class="px-lg py-md text-right">1</td>
+<td class="px-lg py-md text-right">1</td>
+<td class="px-lg py-md text-right">8</td>
+<td class="px-lg py-md text-right">3</td>
+</tr>
+<tr>
+<td class="px-lg py-md font-bold">2014 브라질</td>
+<td class="px-lg py-md">4위</td>
+<td class="px-lg py-md text-right">3</td>
+<td class="px-lg py-md text-right">2</td>
+<td class="px-lg py-md text-right">2</td>
+<td class="px-lg py-md text-right">11</td>
+<td class="px-lg py-md text-right">14</td>
+</tr>
+<tr>
+<td class="px-lg py-md font-bold">2002 한일</td>
+<td class="px-lg py-md text-secondary">우승</td>
+<td class="px-lg py-md text-right">7</td>
+<td class="px-lg py-md text-right">0</td>
+<td class="px-lg py-md text-right">0</td>
+<td class="px-lg py-md text-right">18</td>
+<td class="px-lg py-md text-right">4</td>
+</tr>
+<tr>
+<td class="px-lg py-md font-bold">1970 멕시코</td>
+<td class="px-lg py-md text-secondary">우승</td>
+<td class="px-lg py-md text-right">6</td>
+<td class="px-lg py-md text-right">0</td>
+<td class="px-lg py-md text-right">0</td>
+<td class="px-lg py-md text-right">19</td>
+<td class="px-lg py-md text-right">7</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Section 4: TOP 3 선수 -->
+<section class="space-y-lg">
+<div class="flex items-center gap-sm">
+<span class="w-1 h-8 bg-secondary rounded-full"></span>
+<h3 class="font-headline-lg text-headline-lg text-white">역대 TOP 3 선수 <span class="text-on-surface-variant text-body-lg">(월드컵 득점 기준)</span></h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+<!-- Player Card 1 -->
+<div class="bg-[#151B2E] p-lg rounded-xl border border-white/10 flex flex-col items-center text-center transition-transform hover:scale-[1.02]">
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-secondary mb-md">
+<img class="w-full h-full object-cover" data-alt="A portrait of the legendary football player Pelé in a classic Brazil yellow kit, rendered in a high-fidelity cinematic digital painting style. The background is a blurred stadium atmosphere under floodlights. Golden highlights reflect on his face, evoking his status as the King of Football. Corporate modern aesthetics with clean lines and deep blues in the shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEpOJoVis82xLsMrqq31hZBc34FyJoz68a-OOYt62t47rqJQ6MdVq_aroFHNh3kaydrsEJ3xnl90WVctVOQoywKM7G6G_En6Rde_EaCNC5APJQknyx5b7D_CfoeEbwxSiDXbKXidIwO7EmzLjpKLvhGYAKyFPoUkIAUYP4OpROOu3VVkaR65ILhLfP70MmTFbattZqKV19w1DAn7NrI3zoXun3Dj9WzUJGAy9ZPMmAJXMmM68X5o2f5vpNA6rnISgzr3hHeqXWeEHK"/>
+</div>
+<h4 class="font-headline-md text-headline-md text-white">펠레</h4>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">공격수 (FW)</p>
+<p class="font-stat-xl text-stat-xl text-secondary mt-sm">12골</p>
+<p class="font-body-md text-body-md text-on-surface mt-sm">월드컵 3회 우승의 유일무이한 기록</p>
+</div>
+<!-- Player Card 2 -->
+<div class="bg-[#151B2E] p-lg rounded-xl border border-white/10 flex flex-col items-center text-center transition-transform hover:scale-[1.02]">
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-outline mb-md">
+<img class="w-full h-full object-cover" data-alt="A cinematic sports portrait of Ronaldo Nazario during his peak, wearing the iconic Brazil 2002 World Cup jersey. The image features high-contrast studio lighting with a deep navy background and gold accents. The style is sharp, focused, and professional, capturing the intensity of one of the greatest strikers in history. Tonal layering creates depth." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDg5X-Qi-TeYPTQkcYXayiAQRBqgTiRKciPCgen5FI_eNXpYbprS6vGE12CeSgk2u39BmRQEWTV4PPsXC_eZCg4Y3-egeS9UxxUPTexwu_yyA4hSEBsiouaLlWQ1NecsOvi553ks0H_JpeDqdKFhf7h7XNekFemaDlIyMDvq9OcqlzixVisdckY7vJdYaqQog1bMOseMhYPaIfVnhvDmlO83CRrBCkUWfbV7trvBmv8al_0nd2tLnMZ4Ea7mIxz-p5WsZokzoPV-t3Q"/>
+</div>
+<h4 class="font-headline-md text-headline-md text-white">호나우두</h4>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">공격수 (FW)</p>
+<p class="font-stat-xl text-stat-xl text-secondary mt-sm">15골</p>
+<p class="font-body-md text-body-md text-on-surface mt-sm">2002년 한일 월드컵 득점왕 (8골)</p>
+</div>
+<!-- Player Card 3 -->
+<div class="bg-[#151B2E] p-lg rounded-xl border border-white/10 flex flex-col items-center text-center transition-transform hover:scale-[1.02]">
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-outline mb-md">
+<img class="w-full h-full object-cover" data-alt="A modern, high-contrast digital art portrait of football star Neymar Jr in the Brazil national team kit. The lighting is dramatic, using cool blues and warm gold highlights to create a premium cinematic effect. The facial details are crisp, and the composition is focused on his expression of determination. Set against a dark, textured background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFt33wWjg4qBHv6oQGxpAs_hxJmTKexPF0CkRsE_YSQsrCqI9-QFPgDgYH41FHF0tQQ2wZZrlOW7zG5q0WMOSV_ahbDcg-F2Ljsvtn0pCuUXgTgSxIlL8TZyvCj6H23v_marbfGX036qNU2YX8SPzDsqnQl29swLVOyWsYqzxOrNpbrpSdzUSpqvFQPxCSM00oc7SqXLvlRj36wq_gwHlLt71MlES-xFKtPAjaI5Ki97T6hMYOIPf8a-I5RLHLyuqsEHpRIOi9ipTS"/>
+</div>
+<h4 class="font-headline-md text-headline-md text-white">네이마르</h4>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">공격수 (FW)</p>
+<p class="font-stat-xl text-stat-xl text-secondary mt-sm">8골</p>
+<p class="font-body-md text-body-md text-on-surface mt-sm">브라질 역대 최다 A매치 득점자</p>
+</div>
+</div>
+</section>
+<!-- Section 5: 유튜브 TOP 5 골 -->
+<section class="space-y-lg">
+<div class="flex items-center gap-sm">
+<span class="w-1 h-8 bg-secondary rounded-full"></span>
+<h3 class="font-headline-lg text-headline-lg text-white">역대 TOP 5 골</h3>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+<!-- Video 1 -->
+<div class="space-y-sm">
+<div class="relative aspect-video rounded-xl overflow-hidden group border border-white/10 shadow-lg">
+<img class="w-full h-full object-cover" data-alt="A cinematic still from a legendary football match featuring a goal moment in a packed stadium. The scene is rendered with high-end sports broadcast quality, with vibrant stadium lights, motion blur on the ball, and an intense atmosphere. The color palette emphasizes deep navy shadows and brilliant golden highlights on the players' jerseys. High dynamic range aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6WD4PR5r5YiFXT3BW9UHmrlrP6mqXHSWXWgnOanM_H2N3J2TUxfVCuXc8Gj84CwHtp5DxZBynw4lWz6LI1jJAzEkKclCOp-uBA7SaiCqEJvfA0YTKcmfIw0WeeOpP-wVvRsqj02HxdLqrmV1chMxtDEsN9blM-i0p2QRglAujZYgzSLwaD1zdsc0zchKhl0wUKsr4rhy6Zo92b8Eu2yPS3NeriVfEBOlhSKfEby2hF82qMPuXFWx1QiG9VY3h8uA3PKCCXsMyIJMq"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+<p class="font-body-md text-body-md font-bold">1. 펠레의 1958년 결승전 골</p>
+</div>
+<!-- Video 2 -->
+<div class="space-y-sm">
+<div class="relative aspect-video rounded-xl overflow-hidden group border border-white/10 shadow-lg">
+<img class="w-full h-full object-cover" data-alt="An iconic football moment captured in a dramatic, wide-angle cinematic style. The field is glowing under artificial lights, and the players are in dynamic action. High contrast, rich colors featuring FIFA blue and gold accents in the crowd and equipment. The focus is on the ball flying into the net, creating a sense of historical triumph. Professional sports photography look." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3XUv_F-OcQoEB9ToBfpAoOYvY-g2SE2FZds1GU9nyEPHJxJh8aYQLgMN640_I4fS9P8KzKhhUW_m-fGD9rU_L083iIlzknPJxThoRkDs5S06195Todj1FWcN81ZxWN7n3rhs7PWfXQELLOKT6BVoOlGOhAJYtSjdkhG4ZyPT4DmbXr8VAd9-xydcD_91KipfOE3Y7ZCWudYtq77YQk8uZSiK97OmkggmA8iSJdwtmtJWc3F_QTYx5mTDwqRIJowMdrh1Dz4Ck9ONq"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+<p class="font-body-md text-body-md font-bold">2. 카를루스 아우베르투의 1970년 결승전 골</p>
+</div>
+<!-- Video 3 -->
+<div class="space-y-sm">
+<div class="relative aspect-video rounded-xl overflow-hidden group border border-white/10 shadow-lg">
+<img class="w-full h-full object-cover" data-alt="A professional sports broadcast still of a long-range goal shot. The lighting is cinematic with deep blue night sky background and bright white stadium beams. The textures of the grass and jersey are highly detailed. The mood is one of epic historical sports narrative. Dark mode UI design language with gold and navy highlights throughout the composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtBUNamvA9WizSkH6k3LzD1tLc6w8Q_8T0V-wlFPtFm0OG-te8NGxoc2_CUp49u0yY-zZAFViqhorabtk5zh1MPbumXBYNjiHb_V-Pvs2ti0a27sTf4fLnIQmCJ20npg2fyUwTlSlKQ-uWMeXJrZd97EDrjnnObpHq8REJZFUkW53M9cQ0DZJ-lk7d-B64hKwW0Y6CgceODw1rXhs375alRLlKEE5cDzl3Z2WAV38bInLu8hYFMXZuYdYWbjdvxL7QFbuvY6O60Axy"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+<p class="font-body-md text-body-md font-bold">3. 히바우두의 2002년 터키전 발리골</p>
+</div>
+<!-- Video 4 -->
+<div class="space-y-sm">
+<div class="relative aspect-video rounded-xl overflow-hidden group border border-white/10 shadow-lg">
+<img class="w-full h-full object-cover" data-alt="A dramatic goal celebration moment in a world-class football tournament. The player is sliding on the grass with arms wide open, captured with high speed photography and cinematic lighting. The stadium crowd is a blur of colors. The style is consistent with a premium sports archive, using rich navy tones and sharp focal points. High legibility and data-dense environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArzmWQBp-D7Ix3Enj8xaI1u56TmYJAkVvGpFH8Qez8BlrkKbxjIttnmMCq-DYRBLs1hRZ7d4SHAbawTNhvTkGcvEzG2vRaC1lA2KFT21_X0BwLYPLbMuUT8g5IXHnsjXE_hs-RES204PKVdBAz1QYm5h2QFzWpeUaGRZVoJIAr9op7UakVu5tppcsvBE2Gboj6AgCppq-i5N1nFbV74AYFt9srNsj-0n3hBkAzqz10kFHz6uGuidhxQj-JjUC7oDVGay_0bv7X41Po"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+<p class="font-body-md text-body-md font-bold">4. 호나우지뉴의 2002년 잉글랜드전 프리킥</p>
+</div>
+</div>
+<!-- Video 5 (Centered) -->
+<div class="max-w-2xl mx-auto mt-lg space-y-sm">
+<div class="relative aspect-video rounded-xl overflow-hidden group border border-white/10 shadow-lg">
+<img class="w-full h-full object-cover" data-alt="A stunning cinematic wide shot of a bicycle kick goal in a World Cup match. The lighting creates a silhouette effect with gold rim lighting on the player. The background is a vast, dark stadium with flashes of light from the spectators. The aesthetic is modern corporate sports, prioritizing visual gravity and the prestige of the historical record. Elite broadcast quality." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDG08F7DvK3YTf7N5t0XI6xPN1PZdsbs0a9W25GXZcCcWpLixUqjKn3BeP3lrCQOVK0CdbupZQY1Gy33mh0aLLcsic8Bs34xEBBM3nc-BjiT4Tkx9-zSft0JDO4m_mSNv-_w9sqKYuGltu7GNo037iA9z4V_FWVaHPzJi1M4PJ0SFZZfHvgHcPtDJTrTgV9WfbPx_OHCYHxXHDAxOvtfmt07Vj9rYlKyonpHC2r6VYt7HwyV8cF1W7iAokr_vCJtwtAzanwPoNqany1"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/40">
+<span class="material-symbols-outlined text-white text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</div>
+</div>
+</div>
+<p class="font-body-md text-body-md font-bold text-center">5. 히샬리송의 2022년 세르비아전 시저스킥</p>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-safe px-4 bg-surface-container-high dark:bg-surface-container-high backdrop-blur-md shadow-lg z-50 rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-on-surface active:scale-90 transition-all" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-md text-label-md">홈</span>
+</a>
+<a class="flex flex-col items-center justify-center text-secondary font-bold active:scale-90 transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+<span class="font-label-md text-label-md">기록</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-on-surface active:scale-90 transition-all" href="#">
+<span class="material-symbols-outlined">emoji_events</span>
+<span class="font-label-md text-label-md">대회</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:text-on-surface active:scale-90 transition-all" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">프로필</span>
+</a>
+</nav>
+<script>
+        // Simple scroll reveal for cards
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-4');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-4');
+            observer.observe(section);
+        });
+    </script>
+</body></html>
