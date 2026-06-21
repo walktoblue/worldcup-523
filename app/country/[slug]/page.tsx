@@ -89,7 +89,6 @@ export default function CountryPage({
   const [worldcup, setWorldcup] = useState<Worldcup | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-  const [playingId, setPlayingId] = useState<string | null>(null)
 
   useEffect(() => {
     fetch(`/api/country/${slug}`)
@@ -297,36 +296,30 @@ export default function CountryPage({
                   <p className="text-4xl font-extrabold mt-2" style={{ color: '#E9C349' }}>{p.wc_goals}골</p>
                   <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{p.notable}</p>
 
-                  {/* 대표골 영상 */}
+                  {/* 대표골 영상 — YouTube 새 탭으로 열기 */}
                   {p.video_id && (
                     <div className="w-full mt-5">
                       <p className="text-xs text-muted-foreground mb-2 uppercase tracking-widest">월드컵 대표골</p>
-                      {playingId === p.video_id ? (
-                        <div className="relative w-full aspect-video rounded-lg overflow-hidden">
-                          <iframe
-                            src={`https://www.youtube.com/embed/${p.video_id}?autoplay=1`}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className="absolute inset-0 w-full h-full"
-                          />
-                        </div>
-                      ) : (
-                        <button
-                          onClick={() => setPlayingId(p.video_id!)}
-                          className="relative w-full aspect-video rounded-lg overflow-hidden border border-white/10 group block"
-                        >
-                          <img
-                            src={`https://img.youtube.com/vi/${p.video_id}/mqdefault.jpg`}
-                            alt={p.video_title ?? ''}
-                            className="w-full h-full object-cover"
-                          />
-                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/55 transition-colors">
-                            <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center group-hover:scale-110 transition-transform">
-                              <span className="text-white text-xl ml-0.5">▶</span>
-                            </div>
+                      <a
+                        href={`https://www.youtube.com/watch?v=${p.video_id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="relative w-full aspect-video rounded-lg overflow-hidden border border-white/10 group block"
+                      >
+                        <img
+                          src={`https://img.youtube.com/vi/${p.video_id}/mqdefault.jpg`}
+                          alt={p.video_title ?? ''}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/55 transition-colors">
+                          <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <span className="text-white text-xl ml-0.5">▶</span>
                           </div>
-                        </button>
-                      )}
+                        </div>
+                        <div className="absolute bottom-2 right-2 bg-black/70 rounded px-2 py-0.5 text-xs text-white font-semibold">
+                          YouTube ↗
+                        </div>
+                      </a>
                       {p.video_title && (
                         <p className="text-xs text-muted-foreground mt-2 line-clamp-2 text-left">{p.video_title}</p>
                       )}
