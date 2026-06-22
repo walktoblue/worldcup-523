@@ -59,3 +59,11 @@
 
 ### 라이브
 https://worldcup-523.vercel.app
+
+---
+
+### [2026-06-22] 보안 점검
+- **점검 항목**: .env git 커밋 여부 · NEXT_PUBLIC_ 키 노출 · 하드코딩 비밀 키 · service_role 클라이언트 사용 · RLS 활성화 · 민감정보 평문 저장
+- **결과**: 전 항목 통과. CRITICAL 없음.
+- **남은 위험**: 없음. 이 앱은 로그인·결제·개인정보 수집이 없는 공개 조회 서비스라 공격 표면이 작음. GEMINI_API_KEY·YOUTUBE_API_KEY는 서버 라우트에서만 사용되고 NEXT_PUBLIC_ 없이 관리됨. country_cache 테이블은 RLS + anon INSERT 정책으로 공개 캐시 특성상 허용(공개 월드컵 데이터만 저장).
+- **판단 근거**: grep에서 `card` 키워드가 매치됐으나 전부 Tailwind CSS 클래스명(bg-card 등)으로 민감정보와 무관한 false positive.
