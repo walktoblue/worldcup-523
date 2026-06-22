@@ -36,3 +36,26 @@
 
 ### 라이브
 배포 전 (구현 단계 완료 후 확인 예정)
+
+---
+
+## 구현 (2026-06-22)
+
+### 무엇을 만들었나
+- **검색 화면** (`/`): 헤더(앱명·검색기록·설정), 대형 제목+골드 밑줄, 자동완성 검색창, 인기국가 칩 5개, 검색기록 모달, 설정 모달, 모바일 하단 네비
+- **국가 상세 화면** (`/country/[slug]`): 국기 이미지(Wikipedia), 국가명+기본정보(대륙/수도/인구), 합산 기록 stat 카드 6개, 대회별 기록 테이블, TOP 3 선수 카드(Wikipedia 사진+월드컵 대표골 YouTube 링크), 섹션별 스켈레톤 로딩
+- **API 라우트** (`/api/country/[slug]`): Gemini로 기본정보+기록 한 번에 생성 → Wikipedia 국기/선수사진 → YouTube 선수별 대표골 검색 — 모두 병렬 처리
+
+### 왜 이렇게 결정했나
+- **REST Countries API 제거** — 구현 중 v3.1이 deprecated됨을 발견. 기본정보(대륙/수도/인구/국기이모지)까지 Gemini 프롬프트에 통합해 외부 의존 줄임.
+- **국기 이미지 Wikipedia에서** — `Flag_of_{country}` Wikipedia 페이지의 `originalimage.source`가 고화질 SVG/PNG를 반환함. 별도 서비스 불필요.
+- **YouTube TOP5 → 선수별 대표골 1개씩** — FIFA가 YouTube 외부 embed를 차단함 (`ERR_EMBED_FORBIDDEN`). iframe 대신 새 탭 링크로 변경. 동시에 "일반 TOP5"보다 "선수별 대표골"이 컨텐츠로 더 명확해서 방향 자체를 바꿈.
+- **Supabase country_cache 테이블** — Gemini 무료 플랜 15 RPM 한도 초과 시 429 오류 반복. 한 번 생성한 데이터를 DB에 7일 캐시해 Gemini 재호출 방지.
+
+### 막힌 점과 해결
+- **Gemini JSON 뒤에 추가 텍스트**: `responseMimeType: 'application/json'` 지정해도 가끔 JSON 뒤에 설명 문장 추가 → `JSON.parse` 실패. `extractFirstJSON()` 함수로 첫 번째 완전한 `{}` 블록만 추출해 해결.
+- **Gemini 429 (속도 제한)**: 테스트 중 같은 나라를 여러 번 재요청하거나 여러 나라를 빠르게 연속 요청하면 분당 한도 초과. Supabase `country_cache` 테이블 도입으로 근본 해결.
+- **YouTube embed 차단**: FIFA 공식 영상은 외부 embed 차단 정책 적용. `<iframe>` 제거하고 `<a target="_blank">` + YouTube 썸네일 카드로 변경.
+
+### 라이브
+https://worldcup-523.vercel.app
